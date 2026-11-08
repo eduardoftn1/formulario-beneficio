@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1702556121467894');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1702556121467894&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Verificação de benefício</title>
@@ -285,10 +268,7 @@ src="https://www.facebook.com/tr?id=1702556121467894&ev=PageView&noscript=1"
       b.textContent = o.label;
       b.onclick = function () {
         answers[current] = o.label;
-        if (current === 0) {
-          if (typeof fbq === "function") fbq("track", "InitiateCheckout");
-          checkCountry();
-        } else { current++; render(); }
+        if (current === 0) { checkCountry(); } else { current++; render(); }
       };
       opts.appendChild(b);
     });
@@ -446,9 +426,6 @@ src="https://www.facebook.com/tr?id=1702556121467894&ev=PageView&noscript=1"
 
   function renderPix(j, o) {
     var code = j.qr_code, b64 = j.qr_code_base64;
-    if (typeof fbq === "function") {
-      fbq("track", "AddPaymentInfo", { value: o.cents / 100, currency: "BRL" });
-    }
     document.getElementById("pixArea").innerHTML =
       '<div class="qr" id="qr"></div>' +
       '<p class="lead small">Pix copia e cola</p>' +
@@ -482,11 +459,7 @@ src="https://www.facebook.com/tr?id=1702556121467894&ev=PageView&noscript=1"
           var st = String(t.status || "").toLowerCase();
           if (st === "approved" || st === "paid" || st === "completed") {
             if (done) return;
-            done = true; stopPolling();
-            if (typeof fbq === "function") {
-              fbq("track", "Purchase", { value: o.cents / 100, currency: "BRL" });
-            }
-            o.onPaid();
+            done = true; stopPolling(); o.onPaid();
           } else if (manual) { setText("wait", "Pagamento ainda não identificado. Aguarde alguns instantes."); }
         })
         .catch(function () { if (manual) setText("wait", "Não foi possível verificar agora. Tente novamente."); });
